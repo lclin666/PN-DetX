@@ -12,9 +12,9 @@ from ultralytics.nn.modules import (AIFI, C1, C2, C3, C3TR, SPP, SPPF, Bottlenec
                                     Focus, GhostBottleneck, GhostConv, HGBlock, HGStem, Pose, RepC3, RepConv,
                                     RTDETRDecoder, Segment)
 # 添加自定义模块                                   
-from ultralytics.nn.modules import (ContextAggregation, CoordAtt, CoTAttention, ODConv_3rd, ConvNextBlock, PConv, 
+from ultralytics.nn.modules import (ContextAggregation, CoordAtt, CAM, ODConv_3rd, ConvNextBlock, PConv, 
                                     BiFormerBlock, C2f_BiLevelRoutingAttention, C3_BiLevelRoutingAttention, ASFF2, ASFF3, 
-                                    BiFPN_Concat2, BiFPN_Concat3, space_to_depth)
+                                    FAM, BiFPN_Concat3, space_to_depth)
 
 from ultralytics.utils import DEFAULT_CFG_DICT, DEFAULT_CFG_KEYS, LOGGER, colorstr, emojis, yaml_load
 from ultralytics.utils.checks import check_requirements, check_suffix, check_yaml
@@ -695,7 +695,7 @@ def parse_model(d, ch, verbose=True):  # model_dict, input_channels(3)
                 args.insert(2, n)  # number of repeats
                 n = 1
                 
-        elif m is CoTAttention: # 自定义模块
+        elif m is CAM: # 自定义模块
             c1, c2 = ch[f], args[0]
             if c2 != nc:
                 c2 = make_divisible(min(c2, max_channels) * width, 8)
@@ -708,7 +708,7 @@ def parse_model(d, ch, verbose=True):  # model_dict, input_channels(3)
             c1, c2 = [ch[f[0]], ch[f[1]], ch[f[2]]], args[0]
             c2 = make_divisible(min(c2, max_channels) * width, 8)
             args = [c1, c2, *args[1:]]
-        elif m in [BiFPN_Concat2,BiFPN_Concat3]:
+        elif m in [FAM,BiFPN_Concat3]:
             c2 = sum(ch[x] for x in f)
         elif m is space_to_depth:
             c2 = 4 * ch[f]

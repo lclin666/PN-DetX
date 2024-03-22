@@ -14,9 +14,9 @@ from torch.nn import functional as F
 
 __all__ = ('Conv', 'Conv2', 'LightConv', 'DWConv', 'DWConvTranspose2d', 'ConvTranspose', 'Focus', 'GhostConv',
            'ChannelAttention', 'SpatialAttention', 'CBAM', 'Concat', 'RepConv', 
-           'ContextAggregation', 'CoordAtt', 'CoTAttention', 'ODConv_3rd', 'ConvNextBlock', 'PConv',  # 自定义模块
+           'ContextAggregation', 'CoordAtt', 'CAM', 'ODConv_3rd', 'ConvNextBlock', 'PConv',  # 自定义模块
            'BiFormerBlock', 'C2f_BiLevelRoutingAttention', 'C3_BiLevelRoutingAttention', 'ASFF2', 'ASFF3', 
-           'BiFPN_Concat2', 'BiFPN_Concat3', 'space_to_depth')
+           'FAM', 'BiFPN_Concat3', 'space_to_depth')
 
 
 ######################  SPD-Conv  start ##############################
@@ -35,9 +35,9 @@ class space_to_depth(nn.Module):
 
 ###################### BiFPN  START  ###############################
  
-class BiFPN_Concat2(nn.Module):
+class FAM(nn.Module):
     def __init__(self, dimension=1):
-        super(BiFPN_Concat2, self).__init__()
+        super(FAM, self).__init__()
         self.d = dimension
         self.w = nn.Parameter(torch.ones(2, dtype=torch.float32), requires_grad=True)
         self.epsilon = 0.0001
@@ -738,9 +738,9 @@ class CoordAtt(nn.Module):
 ######################  ContextAggregation  ####   end  ###############################
 
 
-######################  CoTAttention  ####    start  ##############################
+######################  CAM  ####    start  ##############################
 
-class CoTAttention(nn.Module):
+class CAM(nn.Module):
  
     def __init__(self, dim=512, kernel_size=3):
         super().__init__()
@@ -779,7 +779,7 @@ class CoTAttention(nn.Module):
  
         return k1 + k2
 
-######################  CoTAttention  ####    end  ##############################
+######################  CAM  ####    end  ##############################
 
 
 ######################  ODConv  ####    start  ##############################
